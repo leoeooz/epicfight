@@ -2,6 +2,7 @@ package yesman.epicfight.skill.dodge;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
@@ -16,6 +17,7 @@ import yesman.epicfight.api.client.camera.EpicFightCameraAPI;
 import yesman.epicfight.api.client.input.MovementDirection;
 import yesman.epicfight.api.client.input.InputManager;
 import yesman.epicfight.client.input.InputUtils;
+import yesman.epicfight.config.ClientConfig;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.network.client.CPSkillRequest;
 import yesman.epicfight.skill.Skill;
@@ -59,7 +61,9 @@ public class DodgeSkill extends Skill {
         final MovementDirection movementDirection = MovementDirection.fromInputState(InputManager.getInputState(localPlayer.input));
 		final int vertic = movementDirection.vertical();
 		final int horizon = movementDirection.horizontal();
-		float yRot = EpicFightCameraAPI.getInstance().getForwardYRot();
+		float yRot = ClientConfig.dodgeAtCameraDirection
+			? Minecraft.getInstance().gameRenderer.getMainCamera().getYRot()
+			: EpicFightCameraAPI.getInstance().getForwardYRot();
 		float degree = Mth.wrapDegrees(-(90 * horizon * (1 - Math.abs(vertic)) + 45 * vertic * horizon) + yRot);
 		
 		CPSkillRequest packet = new CPSkillRequest(skillContainer.getSlot());

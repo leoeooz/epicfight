@@ -2,9 +2,12 @@ package yesman.epicfight.skill.dodge;
 
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import yesman.epicfight.api.client.camera.EpicFightCameraAPI;
+import yesman.epicfight.config.ClientConfig;
 import yesman.epicfight.network.client.CPSkillRequest;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.world.entity.eventlistener.ComboCounterHandleEvent;
@@ -40,9 +43,12 @@ public class StepSkill extends DodgeSkill {
 		int right = args.readInt();
 		int vertic = forward + backward;
 		int horizon = left + right;
-		int degree = vertic == 0 ? 0 : -(90 * horizon * (1 - Math.abs(vertic)) + 45 * vertic * horizon);
+		float yRot = ClientConfig.dodgeAtCameraDirection
+			? Minecraft.getInstance().gameRenderer.getMainCamera().getYRot()
+			: EpicFightCameraAPI.getInstance().getForwardYRot();
+		float degree = vertic == 0 ? yRot : -(90 * horizon * (1 - Math.abs(vertic)) + 45 * vertic * horizon) + yRot;
 		int animation;
-		
+
 		if (vertic == 0) {
 			if (horizon == 0) {
 				animation = 0;
@@ -52,11 +58,11 @@ public class StepSkill extends DodgeSkill {
 		} else {
 			animation = vertic >= 0 ? 0 : 1;
 		}
-		
+
 		CPSkillRequest packet = new CPSkillRequest(container.getSlot());
 		packet.getBuffer().writeInt(animation);
 		packet.getBuffer().writeFloat(degree);
-		
+
 		return packet;
 	}
 }

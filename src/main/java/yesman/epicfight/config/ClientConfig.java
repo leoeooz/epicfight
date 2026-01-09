@@ -73,7 +73,8 @@ public class ClientConfig {
 	public static final IntValue CAMERA_VERTICAL_LOCATION = BUILDER.defineInRange("ingame.camera.vertical_location", 0, -2, 5);
 	public static final IntValue CAMERA_ZOOM = BUILDER.defineInRange("ingame.camera.zoom", 3, 6, 10);
 	public static final IntValue LOCK_ON_RANGE = BUILDER.defineInRange("ingame.camera.lock_on_range", 20, 5, 25);
-	
+	public static final BooleanValue DODGE_AT_CAMERA_DIRECTION = BUILDER.define("ingame.camera.dodge_at_camera_direction", () -> false);
+
 	// Control Configurations
 	public static final IntValue LONG_PRESS_COUNTER = BUILDER.defineInRange("ingame.long_press_count", 2, 1, 10);
 	public static final BooleanValue AUTO_SWITCH_CAMERA = BUILDER.define("ingame.camera_auto_switch", () -> false);
@@ -169,7 +170,8 @@ public class ClientConfig {
 	public static int cameraVerticalLocation;
 	public static int cameraZoom;
 	public static int lockOnRange;
-	
+	public static boolean dodgeAtCameraDirection;
+
 	// UI Config value
 	public static boolean showTargetIndicator;
 	public static HealthBarVisibility healthBarVisibility;
@@ -214,7 +216,8 @@ public class ClientConfig {
 		cameraVerticalLocation = CAMERA_VERTICAL_LOCATION.get();
 		cameraZoom = CAMERA_ZOOM.get();
 		lockOnRange = LOCK_ON_RANGE.get();
-		
+		dodgeAtCameraDirection = DODGE_AT_CAMERA_DIRECTION.get();
+
 		longPressCounter = LONG_PRESS_COUNTER.get();
 		autoSwitchCamera = AUTO_SWITCH_CAMERA.get();
 		lockOnQuickShift = LOCK_ON_QUICK_SHIFT.get();
@@ -322,7 +325,10 @@ public class ClientConfig {
 		
 		if (lockOnRange != LOCK_ON_RANGE.get())
 			saveWorks.add(() -> LOCK_ON_RANGE.set(lockOnRange));
-		
+
+		if (dodgeAtCameraDirection != DODGE_AT_CAMERA_DIRECTION.get())
+			saveWorks.add(() -> DODGE_AT_CAMERA_DIRECTION.set(dodgeAtCameraDirection));
+
 		if (longPressCounter != LONG_PRESS_COUNTER.get())
 			saveWorks.add(() -> LONG_PRESS_COUNTER.set(longPressCounter));
 		
@@ -434,6 +440,7 @@ public class ClientConfig {
 		if (cameraVerticalLocation != CAMERA_VERTICAL_LOCATION.get()) CAMERA_VERTICAL_LOCATION.set(cameraVerticalLocation);
 		if (cameraZoom != CAMERA_ZOOM.get()) CAMERA_ZOOM.set(cameraZoom);
 		if (lockOnRange != LOCK_ON_RANGE.get()) LOCK_ON_RANGE.set(lockOnRange);
+		if (dodgeAtCameraDirection != DODGE_AT_CAMERA_DIRECTION.get()) DODGE_AT_CAMERA_DIRECTION.set(dodgeAtCameraDirection);
 		if (longPressCounter != LONG_PRESS_COUNTER.get()) LONG_PRESS_COUNTER.set(longPressCounter);
 		if (autoSwitchCamera != AUTO_SWITCH_CAMERA.get()) AUTO_SWITCH_CAMERA.set(autoSwitchCamera);
 		if (lockOnQuickShift != LOCK_ON_QUICK_SHIFT.get()) LOCK_ON_QUICK_SHIFT.set(lockOnQuickShift);
